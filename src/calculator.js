@@ -11,7 +11,7 @@ class Calculator extends Component {
     }
 
     addition = () => {
-        const newValue = parseFloat(this.state.previous) + parseFloat(this.state.current)
+        const newValue = parseFloat(this.state.previous).toFixed(5) + parseFloat(this.state.current).toFixed(5)
         this.calcul(newValue, "addition")
     }
 
@@ -56,15 +56,15 @@ class Calculator extends Component {
                 this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "addition":
-                newValue = parseFloat(this.state.previous) + parseFloat(this.state.current)
+                newValue = parseFloat(this.state.previous).toFixed(5) + parseFloat(this.state.current).toFixed(5)
                 this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "substract":
-                newValue = parseFloat(this.state.previous) - parseFloat(this.state.current)
+                newValue = this.state.previous - this.state.current
                 this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "times":
-                newValue = parseFloat(this.state.previous) * parseFloat(this.state.current)
+                newValue = this.state.previous * this.state.current
                 this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             default: 
