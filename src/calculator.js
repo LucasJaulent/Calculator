@@ -49,18 +49,23 @@ class Calculator extends Component {
     }
 
     equal = () => {
+        var newValue
         switch(this.state.mode) {
             case "divide":
-                this.setState({current: this.state.previous / this.state.current, first: true, previous: null, mode: "", decimalOk: true})
+                newValue = this.state.previous / this.state.current
+                this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "addition":
-                this.setState({current: parseFloat(this.state.previous) + parseFloat(this.state.current), first: true, previous: null, mode: "", decimalOk: true})
+                newValue = parseFloat(this.state.previous) + parseFloat(this.state.current)
+                this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "substract":
-                this.setState({current: this.state.previous - this.state.current, first: true, previous: null, mode: "", decimalOk: true})
+                newValue = parseFloat(this.state.previous) - parseFloat(this.state.current)
+                this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             case "times":
-                this.setState({current: this.state.previous * this.state.current, first: true, previous: null, mode: "", decimalOk: true})
+                newValue = parseFloat(this.state.previous) * parseFloat(this.state.current)
+                this.setState({current: newValue, first: true, decimalOk: true})
                 break;
             default: 
                 break;
@@ -73,10 +78,16 @@ class Calculator extends Component {
 
     inputDecimal = (e) => {
         if(this.state.decimalOk) {
-            const newValue = this.state.current + e.target.value
-            this.setState({current: newValue, decimalOk: false, first: false})
+            if(this.state.first) {
+                const newValue = e.target.value
+                this.setState({current: newValue, decimalOk: false, first: false})
+            } else {
+                const newValue = this.state.current + e.target.value
+                this.setState({current: newValue, decimalOk: false, first: false})
+            }
         }
     }
+
     inputNumber = (e) => {
         if(this.state.first) {
             this.setState({current: e.target.value, first: false})
