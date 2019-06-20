@@ -8,24 +8,29 @@ class Calculator extends Component {
         mode: "",
         first: true,
         decimalOk: true,
+        round: 4,
     }
 
     addition = () => {
-        const newValue = parseFloat(this.state.previous) + parseFloat(this.state.current)
+        this.setState({mode: "addition"})
+        const newValue = this.getNewValue()
         this.calcul(newValue, "addition")
     }
 
     substract = () => {
-        const newValue = this.state.previous - this.state.current
+        const newValue = this.setState({mode: "substract"})
+        this.getNewValue()
         this.calcul(newValue, "substract")
     }
 
     times = () => {
+        this.setState({mode: "times"})
         const newValue = this.state.previous * this.state.current
         this.calcul(newValue, "times")
     }
 
     divide = () => {
+        this.setState({mode: "divide"})
         const newValue = this.state.previous / this.state.current
         this.calcul(newValue, "divide")
     }
@@ -40,33 +45,34 @@ class Calculator extends Component {
         this.setState({current: newValue, first: true, mode: "", previous: null, decimalOk: true})
     }
 
-    calcul = (newValue, newMode = "") => {
+    calcul = (newValue) => {
         if(this.state.previous != null) {
-            this.setState({current: newValue, first: true, mode: newMode, previous: newValue, decimalOk: true})
+            this.setState({current: newValue, first: true, previous: newValue, decimalOk: true})
         } else {
-            this.setState({previous: this.state.current, first: true, mode: newMode, decimalOk: true})
+            this.setState({previous: this.state.current, first: true, decimalOk: true})
         }
     }
 
     equal = () => {
+        const newValue = this.getNewValue()
+        this.setState({current: newValue, first: true, decimalOk: true})
+    }
+
+    getNewValue = () => {
         var newValue
         switch(this.state.mode) {
             case "divide":
                 newValue = this.state.previous / this.state.current
-                this.setState({current: newValue, first: true, decimalOk: true})
-                break;
+                return newValue;
             case "addition":
-                newValue = parseFloat(this.state.previous) + parseFloat(this.state.current)
-                this.setState({current: newValue, first: true, decimalOk: true})
-                break;
+                newValue = this.round(parseFloat(this.state.previous) + parseFloat(this.state.current).toFixed(this.state.round))
+                return newValue;
             case "substract":
                 newValue = this.state.previous - this.state.current
-                this.setState({current: newValue, first: true, decimalOk: true})
-                break;
+                return newValue;
             case "times":
                 newValue = this.state.previous * this.state.current
-                this.setState({current: newValue, first: true, decimalOk: true})
-                break;
+                return newValue;
             default: 
                 break;
         }
@@ -74,6 +80,18 @@ class Calculator extends Component {
 
     clear = () => {
         this.setState({current: 0, previous: null, mode: "", first: true, decimalOk: true})
+    }
+
+    round = (number) => {
+        console.log(number.toString().length)
+        for(let i = number.toString().length+5; i > 0; i--){
+            if(number.toString()[i] === "0" || number.toString()[i] === ".") {
+                number.toString().substring(0, i)
+            } else {
+                break;
+            }
+        }
+        return number;
     }
 
     inputDecimal = (e) => {
